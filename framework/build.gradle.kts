@@ -32,5 +32,16 @@ kotlinter {
 }
 
 dependencies {
+    implementation(projects.data)
+
+    implementation(libs.moshi)
+    implementation(libs.moshi.adapters)
+
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converter.moshi)
+
+    debugImplementation(libs.chucker.debug)
+    releaseImplementation(libs.chucker.release)
+
     testImplementation(libs.test.junit)
 }
