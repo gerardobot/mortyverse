@@ -1,3 +1,41 @@
 <resources>
     <string name="app_name">Mortyverse</string>
+
+    <string name="error_unknown_image_description">Picklerick and Lemorty</string>
+    <string name="error_network_image_description">Rick and Morty trapped in a portal</string>
+    <string name="error_invalid_character_id_image_description">Rick opening Morty\'s eyes</string>
+
+    <string name="error_unknown_title">Unknown Error</string>
+    <string name="error_network_title">Network Error</string>
+    <string name="error_invalid_character_id_title">Invalid Character Id</string>
+
+    <string name="error_unknown_dialog">What\'s this, Rick?\n I-I-I don\'t like it, man.\n I\'m confused!</string>
+    <string name="error_network_dialog">Oh, geez! Oh, man!\nYou actually did it!\nYou broke the Internet!</string>
+    <string name="error_invalid_character_id_dialog">See? I *burp* told you.\nThere\'s no character with that id.\nIt\'s all in your mind, Morty!</string>
+
+    <string name="top_bar_title_home">"Look! I'm a *burp* TopBar!"</string>
+    <string name="top_bar_icon_description_menu">Menu</string>
+    <string name="top_bar_icon_description_back">Back</string>
+
+    <string name="drawer_option_home">Home</string>
+    <string name="drawer_option_invalid_character_id">Use a wrong character ID</string>
+    <string name="drawer_option_network_error">Break the Internet</string>
+    <string name="drawer_option_unknown_error">Do something weird</string>
+
+    <string name="banner_show_me_what_you_got_description">Show me what you got!</string>
+
+    <string name="character_card_image_description">A picture of %1s</string>
+    <string name="character_card_status">Status:</string>
+
+    <string name="character_detail_status">Status:</string>
+    <string name="character_detail_bio">There is not really much we can say about this wondrous specimen.\n\nWe know %s and comes from %s. %s first appeared on episode %s, %s. \n\n%s\'s was last seen on %s.</string>
+
+    <string name="character_detail_bio_male">he is male</string>
+    <string name="character_detail_bio_female">she is female</string>
+    <string name="character_detail_bio_other">they are non binary</string>
+
+    <string name="character_detail_bio_episodes_one">leaving the show after a gruesome experience involving several plumbuses</string>
+    <string name="character_detail_bio_episodes_several">and later came back for more</string>
+    <string name="character_detail_bio_episodes_many">and soon became a recurring character</string>
+
 </resources>

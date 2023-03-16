@@ -18,5 +18,7 @@ kotlinter {
 }
 
 dependencies {
+    implementation(projects.domain)
+
     testImplementation(libs.test.junit)
 }

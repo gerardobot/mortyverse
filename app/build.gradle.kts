@@ -71,10 +71,17 @@ tasks.preBuild {
 }
 
 dependencies {
-    implementation(libs.compose.ui)
-    implementation(libs.compose.material3)
+    implementation(projects.domain)
+    implementation(projects.data)
+    implementation(projects.framework)
+
+    implementation(libs.koin.compose)
+
     implementation(libs.compose.activity)
+    implementation(libs.compose.material3)
+    implementation(libs.compose.navigation)
     implementation(libs.compose.preview)
+    implementation(libs.compose.ui)
 
     debugImplementation(libs.debug.compose.testManifest)
     debugImplementation(libs.debug.compose.tooling)
