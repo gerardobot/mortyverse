@@ -10,7 +10,7 @@ import com.minroud.mortyverse.framework.data.sources.remote.retrofit.rickandmort
 import com.minroud.mortyverse.framework.data.sources.remote.retrofit.rickandmorty.api.toMortyverseCharacterDetail
 import com.minroud.mortyverse.framework.data.sources.remote.retrofit.rickandmorty.api.toMortyverseCharacterList
 
-class RickAndMortyRemoteDataSourceRetrofit(
+class RickAndMortyRetrofitRemoteDataSource(
     private val rickAndMortyApiService: RickAndMortyApiService
 ) : RickAndMortyRemoteDataSource {
     override suspend fun getCharacters(): DomainResult<List<MortyverseCharacter>> =
