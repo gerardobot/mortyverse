@@ -16,13 +16,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.minroud.mortyverse.R
 import com.minroud.mortyverse.domain.entities.character.MortyverseCharacter
-import com.minroud.mortyverse.framework.ui.loaders.ImageLoader
+import com.minroud.mortyverse.framework.ui.image.AsyncImage
 import org.koin.androidx.compose.get
 
 @Composable
 fun CharacterCard(
     character: MortyverseCharacter,
-    imageLoader: ImageLoader = get(),
+    AsyncImage: AsyncImage = get(),
     onClick: (String) -> Unit
 ) = Card(
     modifier = Modifier
@@ -41,8 +41,8 @@ fun CharacterCard(
         Surface(
             modifier = Modifier.size(100.dp)
         ) {
-            imageLoader.AsyncImage(
-                model = character.image,
+            AsyncImage(
+                source = character.image,
                 contentDescription = stringResource(
                     R.string.character_card_image_description,
                     character.name
@@ -51,6 +51,7 @@ fun CharacterCard(
                 contentScale = null
             )
         }
+
         Column(
             modifier = Modifier
                 .padding(start = 8.dp, end = 8.dp)

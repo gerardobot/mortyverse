@@ -15,20 +15,20 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.minroud.mortyverse.R
 import com.minroud.mortyverse.domain.entities.character.MortyverseCharacterDetail
-import com.minroud.mortyverse.framework.ui.loaders.ImageLoader
+import com.minroud.mortyverse.framework.ui.image.AsyncImage
 import org.koin.androidx.compose.get
 
 @Composable
 fun CharacterBio(
     characterDetail: MortyverseCharacterDetail,
     modifier: Modifier = Modifier,
-    imageLoader: ImageLoader = get()
+    AsyncImage: AsyncImage = get()
 ) =
     Column(modifier = modifier) {
-        imageLoader.AsyncImage(
+        AsyncImage(
             modifier = Modifier
                 .fillMaxWidth(),
-            model = characterDetail.mortyverseCharacter.image,
+            source = characterDetail.mortyverseCharacter.image,
             contentDescription = stringResource(
                 R.string.character_card_image_description,
                 characterDetail.mortyverseCharacter.name
