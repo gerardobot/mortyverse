@@ -1,3 +1,6 @@
+import org.gradle.api.artifacts.VersionCatalogsExtension
+import org.gradle.kotlin.dsl.getByType
+
 plugins {
     `kotlin-dsl`
 }
@@ -5,16 +8,14 @@ plugins {
 repositories {
     google()
     mavenCentral()
+    gradlePluginPortal()
 }
+
+val con = extensions.getByType<VersionCatalogsExtension>().named("con")
 
 dependencies {
-    implementation("com.android.tools.build:gradle:7.4.2")
-}
-
-gradlePlugin {
-    plugins.register("mortyverse-config") {
-        id = "mortyverse-config"
-        version = "1.0"
-        implementationClass = "ConfigPlugin"
-    }
+    implementation(con.findLibrary("android-gradle-plugin").get())
+    implementation(con.findLibrary("kotlin-gradle-plugin").get())
+    implementation(con.findLibrary("compose-compiler-gradle-plugin").get())
+    implementation(con.findLibrary("kotlinter-gradle").get())
 }
