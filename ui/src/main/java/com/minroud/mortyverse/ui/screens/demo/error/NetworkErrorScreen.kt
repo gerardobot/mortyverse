@@ -6,7 +6,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import com.minroud.mortyverse.R
+import com.minroud.mortyverse.ui.R
 import com.minroud.mortyverse.domain.result.error.DomainError
 import com.minroud.mortyverse.ui.error.ErrorMessage
 import com.minroud.mortyverse.ui.navigation.TopBar

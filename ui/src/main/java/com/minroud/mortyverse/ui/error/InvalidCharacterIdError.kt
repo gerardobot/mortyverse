@@ -13,28 +13,27 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.minroud.mortyverse.R
-import com.minroud.mortyverse.ui.theme.MortyShirt
+import com.minroud.mortyverse.ui.R
 
 @Composable
-fun UnknownError() = Column(
+fun InvalidCharacterIdError() = Column(
     Modifier
         .fillMaxSize()
         .background(MaterialTheme.colorScheme.primary),
     verticalArrangement = Arrangement.Center
 ) {
     Image(
-        modifier = Modifier.fillMaxWidth().offset(y = (-24).dp),
-        painter = painterResource(id = R.drawable.img_picklerick_and_lemorty),
-        contentDescription = stringResource(id = R.string.error_unknown_image_description)
+        modifier = Modifier.fillMaxWidth(),
+        painter = painterResource(id = R.drawable.img_open_eyes),
+        contentDescription = stringResource(id = R.string.error_invalid_character_id_image_description)
     )
 
     Spacer(modifier = Modifier.size(16.dp))
 
     Text(
         modifier = Modifier.padding(horizontal = 28.dp),
-        text = stringResource(id = R.string.error_unknown_dialog),
-        color = MortyShirt,
+        text = stringResource(id = R.string.error_invalid_character_id_dialog),
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
         fontSize = 30.sp,
         fontWeight = FontWeight.Bold,
         lineHeight = 40.sp,

@@ -10,17 +10,17 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import com.minroud.mortyverse.ext.titleAsStringRes
-import com.minroud.mortyverse.ui.common.StatefulContent
+import com.minroud.mortyverse.ui.ext.titleAsStringRes
+import com.minroud.mortyverse.ui.common.AsyncContent
 import com.minroud.mortyverse.ui.navigation.TopBar
 import com.minroud.mortyverse.ui.navigation.TopBarButton
-import org.koin.androidx.compose.getViewModel
+import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CharacterDetail(
     topBarButton: TopBarButton,
-    viewModel: CharacterDetailViewModel = getViewModel()
+    viewModel: CharacterDetailViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsState()
 
@@ -28,15 +28,16 @@ fun CharacterDetail(
         topBar = {
             TopBar(
                 button = topBarButton,
-                title = state.error?.titleAsStringRes?.let { stringResource(it) }.orEmpty()
+                title = state.characterDetail?.errorOrNull()?.titleAsStringRes?.let {
+                    stringResource(it)
+                }.orEmpty()
             )
         }
     ) { padding ->
-        StatefulContent(isLoading = state.isLoading, error = state.error) {
+        AsyncContent(result = state.characterDetail, modifier = Modifier.padding(padding)) {
             CharacterBio(
-                characterDetail = state.characterDetail!!,
+                characterDetail = it,
                 modifier = Modifier
-                    .padding(padding)
                     .background(MaterialTheme.colorScheme.primary)
                     .fillMaxSize()
                     .verticalScroll(rememberScrollState())

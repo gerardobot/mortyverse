@@ -13,7 +13,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.minroud.mortyverse.R
+import com.minroud.mortyverse.ui.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -23,7 +23,7 @@ fun TopBar(
     title: String = ""
 ) {
     TopAppBar(
-        colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = MaterialTheme.colorScheme.primary),
+        colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.primary),
         modifier = modifier
             .shadow(elevation = 2.dp),
         navigationIcon = {
@@ -46,10 +46,10 @@ fun TopBar(
 }
 
 sealed class TopBarButton(val icon: ImageVector, @StringRes val iconDescription: Int) {
-    data class Menu(override inline val onClick: () -> Unit) :
+    data class Menu(override val onClick: () -> Unit) :
         TopBarButton(Icons.Filled.Menu, R.string.top_bar_icon_description_menu)
 
-    data class Back(override inline val onClick: () -> Unit) :
+    data class Back(override val onClick: () -> Unit) :
         TopBarButton(Icons.Filled.ArrowBack, R.string.top_bar_icon_description_back)
 
     abstract val onClick: () -> Unit

@@ -14,15 +14,15 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.minroud.mortyverse.R
+import com.minroud.mortyverse.ui.R
 import com.minroud.mortyverse.domain.entities.character.MortyverseCharacter
 import com.minroud.mortyverse.framework.ui.loaders.ImageLoader
-import org.koin.androidx.compose.get
+import org.koin.compose.koinInject
 
 @Composable
 fun CharacterCard(
     character: MortyverseCharacter,
-    imageLoader: ImageLoader = get(),
+    imageLoader: ImageLoader = koinInject(),
     onClick: (String) -> Unit
 ) = Card(
     modifier = Modifier

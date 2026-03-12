@@ -26,7 +26,8 @@ include(
     ":app",
     ":domain",
     ":data",
-    ":framework"
+    ":framework",
+    ":ui"
 )
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")

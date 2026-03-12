@@ -1,10 +1,11 @@
-package com.minroud.mortyverse.ext
+package com.minroud.mortyverse.ui.ext
 
-import androidx.annotation.StringRes
-import com.minroud.mortyverse.R
 import com.minroud.mortyverse.domain.result.error.DomainError
+import com.minroud.mortyverse.ui.R
 
-val DomainError.titleAsStringRes get(): @StringRes Int = when (this) {
+@get:androidx.annotation.StringRes
+val DomainError.titleAsStringRes: Int
+    get() = when (this) {
     is DomainError.CharacterDetail.InvalidId -> R.string.error_invalid_character_id_title
     is DomainError.NetworkError -> R.string.error_network_title
     is DomainError.IoError, is DomainError.Unknown -> R.string.error_unknown_title

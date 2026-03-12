@@ -13,16 +13,16 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.minroud.mortyverse.R
+import com.minroud.mortyverse.ui.R
 import com.minroud.mortyverse.domain.entities.character.MortyverseCharacterDetail
 import com.minroud.mortyverse.framework.ui.loaders.ImageLoader
-import org.koin.androidx.compose.get
+import org.koin.compose.koinInject
 
 @Composable
 fun CharacterBio(
     characterDetail: MortyverseCharacterDetail,
     modifier: Modifier = Modifier,
-    imageLoader: ImageLoader = get()
+    imageLoader: ImageLoader = koinInject()
 ) =
     Column(modifier = modifier) {
         imageLoader.AsyncImage(

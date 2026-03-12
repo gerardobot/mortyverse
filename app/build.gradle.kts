@@ -22,20 +22,18 @@ tasks.matching { it.name == "installKotlinterPrePushHook" }.configureEach {
 }
 
 dependencies {
+    implementation(projects.ui)
     implementation(projects.domain)
     implementation(projects.data)
     implementation(projects.framework)
 
-    implementation(libs.koin.compose)
+    implementation(platform(libs.compose.bom))
+    implementation(platform(libs.koin.bom))
 
     implementation(libs.compose.activity)
-    implementation(libs.compose.material3)
-    implementation(libs.compose.navigation)
-    implementation(libs.compose.preview)
-    implementation(libs.compose.ui)
+    implementation(libs.koin.android)
 
     debugImplementation(libs.debug.compose.testManifest)
-    debugImplementation(libs.debug.compose.tooling)
 
     testImplementation(libs.test.junit)
 }

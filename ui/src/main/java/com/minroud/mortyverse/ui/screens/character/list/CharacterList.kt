@@ -19,15 +19,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import com.minroud.mortyverse.R
+import com.minroud.mortyverse.ui.R
 import com.minroud.mortyverse.ui.animations.LoadingAnimation
 import com.minroud.mortyverse.ui.common.StatefulContent
-import com.minroud.mortyverse.ui.error.ErrorMessage
 import com.minroud.mortyverse.ui.navigation.DrawerContent
 import com.minroud.mortyverse.ui.navigation.DrawerOption
 import com.minroud.mortyverse.ui.navigation.TopBar
 import com.minroud.mortyverse.ui.navigation.TopBarButton
-import org.koin.androidx.compose.getViewModel
+import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -36,7 +35,7 @@ fun CharacterList(
     drawerOptions: List<DrawerOption>,
     drawerState: DrawerState,
     onCharacterSelected: (String) -> Unit,
-    viewModel: CharacterListViewModel = getViewModel()
+    viewModel: CharacterListViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsState()
     val lazyListState: LazyListState = rememberLazyListState()
@@ -50,19 +49,19 @@ fun CharacterList(
             DrawerContent(drawerOptions = drawerOptions)
         },
         content = {
-            if (state.error != null) {
-                Scaffold(
-                    topBar = {
-                        TopBar(
-                            button = topBarButton,
-                            title = stringResource(id = R.string.top_bar_title_home)
-                        )
-                    }
-                ) { padding ->
-                    ErrorMessage(error = state.error!!, modifier = Modifier.padding(padding))
+            Scaffold(
+                topBar = {
+                    if (state.error != null) TopBar(
+                        button = topBarButton,
+                        title = stringResource(id = R.string.top_bar_title_home)
+                    )
                 }
-            } else {
-                StatefulContent(isLoading = state.isLoading, error = state.error) {
+            ) { padding ->
+                StatefulContent(
+                    isLoading = state.isLoading,
+                    error = state.error,
+                    modifier = Modifier.padding(padding)
+                ) {
                     LazyColumn(state = lazyListState) {
                         stickyHeader {
                             TopBar(

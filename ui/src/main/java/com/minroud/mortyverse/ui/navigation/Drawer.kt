@@ -21,7 +21,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.minroud.mortyverse.R
+import com.minroud.mortyverse.ui.R
 
 @Composable
 fun DrawerContent(
@@ -66,16 +66,16 @@ fun DrawerContent(
 }
 
 sealed class DrawerOption(@StringRes val name: Int) {
-    data class Home(override inline val onClick: (DrawerOption) -> Unit) :
+    data class Home(override val onClick: (DrawerOption) -> Unit) :
         DrawerOption(R.string.drawer_option_home)
 
-    data class InvalidCharacterId(override inline val onClick: (DrawerOption) -> Unit) :
+    data class InvalidCharacterId(override val onClick: (DrawerOption) -> Unit) :
         DrawerOption(R.string.drawer_option_invalid_character_id)
 
-    data class NetworkError(override inline val onClick: (DrawerOption) -> Unit) :
+    data class NetworkError(override val onClick: (DrawerOption) -> Unit) :
         DrawerOption(R.string.drawer_option_network_error)
 
-    data class UnknownError(override inline val onClick: (DrawerOption) -> Unit) :
+    data class UnknownError(override val onClick: (DrawerOption) -> Unit) :
         DrawerOption(R.string.drawer_option_unknown_error)
 
     abstract val onClick: (DrawerOption) -> Unit

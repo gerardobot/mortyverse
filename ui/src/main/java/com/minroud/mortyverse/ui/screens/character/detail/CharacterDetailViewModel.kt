@@ -4,12 +4,12 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.minroud.mortyverse.domain.entities.character.MortyverseCharacterDetail
+import com.minroud.mortyverse.domain.result.DomainResult
 import com.minroud.mortyverse.domain.result.error.DomainError
 import com.minroud.mortyverse.domain.usecases.characters.GetCharacterDetailUseCase
 import com.minroud.mortyverse.ui.navigation.NavArg
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class CharacterDetailViewModel(
@@ -22,36 +22,17 @@ class CharacterDetailViewModel(
     init {
         val characterId = savedStateHandle.get<String>(NavArg.CharacterId.key)
         if (characterId.isNullOrEmpty()) {
-            _state.update {
-                it.copy(error = DomainError.CharacterDetail.InvalidId())
-            }
+            _state.value = State(DomainResult.Error(DomainError.CharacterDetail.InvalidId()))
         } else {
             getCharacterDetail(characterId = characterId)
         }
     }
 
     private fun getCharacterDetail(characterId: String) = viewModelScope.launch {
-        getCharacterDetail(GetCharacterDetailUseCase.Params(characterId))
-            .onSuccess { characterDetail ->
-                _state.update {
-                    it.copy(
-                        characterDetail = characterDetail
-                    )
-                }
-            }
-            .onError { error ->
-                _state.update {
-                    it.copy(
-                        error = error
-                    )
-                }
-            }
+        _state.value = State(getCharacterDetail(GetCharacterDetailUseCase.Params(characterId)))
     }
 }
 
 data class State(
-    val characterDetail: MortyverseCharacterDetail? = null,
-    val error: DomainError? = null
-) {
-    val isLoading = characterDetail == null && error == null
-}
+    val characterDetail: DomainResult<MortyverseCharacterDetail>? = null
+)
