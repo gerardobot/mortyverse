@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit
 class ServiceInstanceCreator(
     private val context: Context
 ) {
-    inline fun <reified T> create(
+    internal inline operator fun <reified T> invoke(
         baseUrl: String,
         interceptors: List<Interceptor> = listOf()
     ): T = Retrofit.Builder().apply {
@@ -21,7 +21,7 @@ class ServiceInstanceCreator(
         client(getClient(interceptors))
     }.build().create(T::class.java)
 
-    fun getClient(interceptors: List<Interceptor>): OkHttpClient = OkHttpClient.Builder().apply {
+    private fun getClient(interceptors: List<Interceptor>): OkHttpClient = OkHttpClient.Builder().apply {
         interceptors.forEach { addInterceptor(it) }
         addInterceptor(ChuckerInterceptor.Builder(context).alwaysReadResponseBody(true).build())
         readTimeout(TIMEOUT_IN_SECONDS.toLong(), TimeUnit.SECONDS)

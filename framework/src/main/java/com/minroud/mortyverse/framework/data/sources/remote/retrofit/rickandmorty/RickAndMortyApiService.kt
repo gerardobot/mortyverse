@@ -24,4 +24,4 @@ interface RickAndMortyApiService {
 
 fun createRickAndMortyApiServiceInstance(
     serviceInstanceCreator: ServiceInstanceCreator
-): RickAndMortyApiService = serviceInstanceCreator.create(BaseUrls.rickAndMorty)
+): RickAndMortyApiService = serviceInstanceCreator(BaseUrls.rickAndMorty)
