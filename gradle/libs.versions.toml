@@ -7,7 +7,6 @@ compose-navigation = "2.9.7"
 chucker = "4.3.1"
 junit = "4.13.2"
 kotlin = "2.3.10"
-kotlinter = "5.4.2"
 kotlinx-coroutines = "1.10.2"
 koin-bom = "4.1.1"
 ksp = "2.3.6"
@@ -20,7 +19,6 @@ retrofit = "3.0.0"
 android-gradle-plugin = { module = "com.android.tools.build:gradle", version.ref = "android-gradle-plugin" }
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 compose-compiler-gradle-plugin = { module = "org.jetbrains.kotlin:compose-compiler-gradle-plugin", version.ref = "kotlin" }
-kotlinter-gradle = { module = "org.jmailen.gradle:kotlinter-gradle", version.ref = "kotlinter" }
 
 ## Implementation ##
 # Coil
@@ -61,7 +59,6 @@ ksp-moshi = { module = "com.squareup.moshi:moshi-kotlin-codegen", version.ref = 
 debug-chucker = { module = "com.github.chuckerteam.chucker:library", version.ref = "chucker" }
 
 # Compose
-debug-compose-testManifest = { module = "androidx.compose.ui:ui-test-manifest" }
 debug-compose-tooling = { module = "androidx.compose.ui:ui-tooling" }
 
 ## Release ##
@@ -75,6 +72,7 @@ test-mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 test-kotlin = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin"}
 
 [plugins]
-android-app = { id = "com.android.application", version.ref = "android-gradle-plugin" }
-android-library = { id = "com.android.library", version.ref = "android-gradle-plugin" }
+mortyverse-android-application = { id = "mortyverse.android.application" }
+mortyverse-android-library = { id = "mortyverse.android.library" }
+mortyverse-jvm-library = { id = "mortyverse.jvm.library" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }

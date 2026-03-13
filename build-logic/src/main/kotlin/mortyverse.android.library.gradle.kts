@@ -1,29 +1,25 @@
 import com.android.build.api.dsl.LibraryExtension
-import org.gradle.kotlin.dsl.configure
 import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension
 
 plugins {
+    id("com.android.library")
     id("org.jetbrains.kotlin.plugin.compose")
-    id("org.jmailen.kotlinter")
 }
 
 extensions.configure<LibraryExtension> {
+    configureNamespace(project.name)
     compileSdk = Config.compileSdk
 
-    defaultConfig {
-        minSdk = Config.minSdk
-    }
+    defaultConfig { minSdk = Config.minSdk }
 
-    compileOptions {
-        sourceCompatibility = Config.javaVersion
-        targetCompatibility = Config.javaVersion
-    }
+    compileOptions { configureCompileOptions() }
 
-    buildFeatures {
-        compose = true
-    }
+    buildFeatures { compose = true }
+
+    packaging { configurePackaging() }
 }
 
 extensions.configure<KotlinAndroidProjectExtension> {
     jvmToolchain(Config.jvmToolchain)
+    compilerOptions { configureCompiler() }
 }

@@ -7,16 +7,11 @@ pluginManagement {
 }
 
 dependencyResolutionManagement {
-    repositories {
-        google()
-        mavenCentral()
-        gradlePluginPortal()
-    }
     versionCatalogs {
-        create("con") {
+        create("libs") {
             from(files("../gradle/libs.versions.toml"))
         }
     }
 }
 
-rootProject.name = "Config"
+rootProject.name = "build-logic"

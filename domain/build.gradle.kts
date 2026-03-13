@@ -1,5 +1,5 @@
 plugins {
-    id("mortyverse.jvm.library")
+    alias(libs.plugins.mortyverse.jvm.library)
 }
 
 dependencies {

@@ -1,13 +1,14 @@
+
 import com.android.build.api.dsl.ApplicationExtension
-import org.gradle.kotlin.dsl.configure
 import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension
 
 plugins {
+    id("com.android.application")
     id("org.jetbrains.kotlin.plugin.compose")
-    id("org.jmailen.kotlinter")
 }
 
 extensions.configure<ApplicationExtension> {
+    namespace = Config.appId
     compileSdk = Config.compileSdk
 
     defaultConfig {
@@ -16,28 +17,23 @@ extensions.configure<ApplicationExtension> {
         targetSdk = Config.targetSdk
         versionCode = Config.versionCode
         versionName = Config.versionName
-
-        vectorDrawables {
-            useSupportLibrary = true
-        }
     }
 
-    compileOptions {
-        sourceCompatibility = Config.javaVersion
-        targetCompatibility = Config.javaVersion
-    }
+    compileOptions { configureCompileOptions() }
 
-    buildFeatures {
-        compose = true
-    }
+    packaging { configurePackaging() }
 
-    packaging {
-        resources {
-            excludes += Config.excludes
+    buildFeatures { compose = true }
+
+    buildTypes {
+        release {
+            isMinifyEnabled = false
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
 }
 
 extensions.configure<KotlinAndroidProjectExtension> {
     jvmToolchain(Config.jvmToolchain)
+    compilerOptions { configureCompiler() }
 }

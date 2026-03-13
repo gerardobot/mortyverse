@@ -1,10 +1,5 @@
 plugins {
-    alias(libs.plugins.android.library)
-    id("mortyverse.android.library")
-}
-
-android {
-    namespace = "com.minroud.mortyverse.ui"
+    alias(libs.plugins.mortyverse.android.library)
 }
 
 dependencies {

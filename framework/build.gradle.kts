@@ -1,15 +1,6 @@
 plugins {
-    alias(libs.plugins.android.library)
+    alias(libs.plugins.mortyverse.android.library)
     alias(libs.plugins.ksp)
-    id("mortyverse.android.library")
-}
-
-android {
-    namespace = "com.minroud.mortyverse.framework"
-
-    defaultConfig {
-        consumerProguardFiles("consumer-rules.pro")
-    }
 }
 
 dependencies {
