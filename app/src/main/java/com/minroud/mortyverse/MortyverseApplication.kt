@@ -12,7 +12,7 @@ class MortyverseApplication : Application() {
         startKoin {
             androidContext(this@MortyverseApplication)
             modules(
-                frameworkModule,
+                infraModule,
                 remoteModule,
                 repositoryModule,
                 useCaseModule,

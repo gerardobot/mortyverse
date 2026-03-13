@@ -24,7 +24,7 @@ include(
     ":app",
     ":domain",
     ":data",
-    ":framework",
+    ":infra",
     ":ui"
 )
 

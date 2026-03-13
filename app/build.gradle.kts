@@ -6,7 +6,7 @@ dependencies {
     implementation(projects.ui)
     implementation(projects.domain)
     implementation(projects.data)
-    implementation(projects.framework)
+    implementation(projects.infra)
 
     implementation(platform(libs.koin.bom))
     implementation(libs.compose.activity)

@@ -4,7 +4,7 @@ plugins {
 
 dependencies {
     implementation(projects.domain)
-    implementation(projects.framework)
+    implementation(projects.infra)
 
     implementation(platform(libs.compose.bom))
     implementation(platform(libs.koin.bom))
