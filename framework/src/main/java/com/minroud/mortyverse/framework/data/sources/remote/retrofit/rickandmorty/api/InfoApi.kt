@@ -1,12 +1,12 @@
 package com.minroud.mortyverse.framework.data.sources.remote.retrofit.rickandmorty.api
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
-@JsonClass(generateAdapter = true)
+@Serializable
 data class InfoApi(
-    @Json(name = "count") val characterCount: Int,
-    @Json(name = "pages") val pageCount: Int,
-    @Json(name = "next") val nextPage: String?,
-    @Json(name = "prev") val previousPage: String?
+    @SerialName("count") val characterCount: Int,
+    @SerialName("pages") val pageCount: Int,
+    @SerialName("next") val nextPage: String?,
+    @SerialName("prev") val previousPage: String?
 )

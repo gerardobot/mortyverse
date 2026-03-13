@@ -8,10 +8,9 @@ chucker = "4.3.1"
 junit = "4.13.2"
 kotlin = "2.3.10"
 kotlinx-coroutines = "1.10.2"
+kotlinx-serialization = "1.10.0"
 koin-bom = "4.1.1"
-ksp = "2.3.6"
 mockk = "1.14.9"
-moshi = "1.15.2"
 retrofit = "3.0.0"
 
 [libraries]
@@ -42,17 +41,11 @@ koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose" }
 
 # Kotlinx
 kotlinx-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
-
-# Moshi
-moshi = { module = "com.squareup.moshi:moshi-kotlin", version.ref = "moshi" }
-moshi-adapters = { module = "com.squareup.moshi:moshi-adapters", version.ref = "moshi" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
 
 # Retrofit
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
-retrofit-converter-moshi = { module = "com.squareup.retrofit2:converter-moshi", version.ref = "retrofit" }
-
-## Ksp ##
-ksp-moshi = { module = "com.squareup.moshi:moshi-kotlin-codegen", version.ref = "moshi" }
+retrofit-converter-kotlinx-serialization = { module = "com.squareup.retrofit2:converter-kotlinx-serialization", version.ref = "retrofit" }
 
 ## Debug ##
 # Chucker
@@ -75,4 +68,4 @@ test-kotlin = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotl
 mortyverse-android-application = { id = "mortyverse.android.application" }
 mortyverse-android-library = { id = "mortyverse.android.library" }
 mortyverse-jvm-library = { id = "mortyverse.jvm.library" }
-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }

@@ -9,7 +9,6 @@ import org.koin.dsl.module
 
 val remoteModule = module {
     single { ServiceInstanceCreator(androidContext()) }
-
     single { createRickAndMortyApiServiceInstance(get()) }
     single<RickAndMortyRemoteDataSource> { RickAndMortyRemoteDataSourceRetrofit(get()) }
 }

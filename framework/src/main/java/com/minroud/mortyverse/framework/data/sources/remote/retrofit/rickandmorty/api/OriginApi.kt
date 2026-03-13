@@ -1,9 +1,9 @@
 package com.minroud.mortyverse.framework.data.sources.remote.retrofit.rickandmorty.api
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
-@JsonClass(generateAdapter = true)
+@Serializable
 data class OriginApi(
-    @Json(name = "name") val name: String
+    @SerialName("name") val name: String
 )

@@ -2,15 +2,15 @@ package com.minroud.mortyverse.framework.data.sources.remote.retrofit.rickandmor
 
 import com.minroud.mortyverse.domain.entities.character.MortyverseCharacter
 import com.minroud.mortyverse.domain.entities.pagination.Page
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 const val PAGE_NUMBER_DELIMITER = "="
 
-@JsonClass(generateAdapter = true)
+@Serializable
 data class CharacterResponseApi(
-    @Json(name = "info") val paginationInfo: InfoApi,
-    @Json(name = "results") val characters: List<CharacterApi>
+    @SerialName("info") val paginationInfo: InfoApi,
+    @SerialName("results") val characters: List<CharacterApi>
 )
 
 fun CharacterResponseApi.toMortyverseCharacterList() = characters.map { it.toMortyverseCharacter() }

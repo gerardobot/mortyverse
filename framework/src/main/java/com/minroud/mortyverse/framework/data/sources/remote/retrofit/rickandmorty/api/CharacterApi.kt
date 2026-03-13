@@ -2,21 +2,21 @@ package com.minroud.mortyverse.framework.data.sources.remote.retrofit.rickandmor
 
 import com.minroud.mortyverse.domain.entities.character.MortyverseCharacter
 import com.minroud.mortyverse.domain.entities.character.MortyverseCharacterDetail
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
-@JsonClass(generateAdapter = true)
+@Serializable
 data class CharacterApi(
-    @Json(name = "id") val id: Int,
-    @Json(name = "name") val name: String,
-    @Json(name = "species") val species: String,
-    @Json(name = "type") val type: String,
-    @Json(name = "status") val status: String,
-    @Json(name = "image") val image: String,
-    @Json(name = "gender") val gender: String,
-    @Json(name = "origin") val origin: OriginApi,
-    @Json(name = "location") val location: LocationApi,
-    @Json(name = "episode") val episodes: List<String>
+    @SerialName("id") val id: Int,
+    @SerialName("name") val name: String,
+    @SerialName("species") val species: String,
+    @SerialName("type") val type: String,
+    @SerialName("status") val status: String,
+    @SerialName("image") val image: String,
+    @SerialName("gender") val gender: String,
+    @SerialName("origin") val origin: OriginApi,
+    @SerialName("location") val location: LocationApi,
+    @SerialName("episode") val episodes: List<String>
 )
 
 fun CharacterApi.toMortyverseCharacter() = MortyverseCharacter(

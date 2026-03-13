@@ -1,6 +1,6 @@
 plugins {
     alias(libs.plugins.mortyverse.android.library)
-    alias(libs.plugins.ksp)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 dependencies {
@@ -15,10 +15,8 @@ dependencies {
     implementation(libs.compose.ui)
 
     implementation(libs.retrofit)
-    implementation(libs.retrofit.converter.moshi)
-    implementation(libs.moshi)
-    implementation(libs.moshi.adapters)
-    ksp(libs.ksp.moshi)
+    implementation(libs.retrofit.converter.kotlinx.serialization)
+    implementation(libs.kotlinx.serialization.json)
 
     debugImplementation(libs.debug.chucker)
     releaseImplementation(libs.release.chucker)
