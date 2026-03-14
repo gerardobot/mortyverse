@@ -30,3 +30,6 @@ captures/
 
 # Mac files
 .DS_Store
+
+# AI tooling
+.ai/

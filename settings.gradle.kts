@@ -1,7 +1,8 @@
 @file:Suppress("UnstableApiUsage")
 
 pluginManagement {
-    includeBuild("config")
+    includeBuild("build-logic")
+
     repositories {
         google()
         mavenCentral()
@@ -23,7 +24,8 @@ include(
     ":app",
     ":domain",
     ":data",
-    ":framework"
+    ":infra",
+    ":ui",
 )
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
