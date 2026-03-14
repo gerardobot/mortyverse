@@ -25,7 +25,7 @@ include(
     ":domain",
     ":data",
     ":infra",
-    ":ui"
+    ":ui",
 )
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
