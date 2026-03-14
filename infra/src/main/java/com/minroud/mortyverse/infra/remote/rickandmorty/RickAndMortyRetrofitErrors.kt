@@ -1,4 +1,4 @@
-package com.minroud.mortyverse.infra.data.sources.remote.retrofit.rickandmorty
+package com.minroud.mortyverse.infra.remote.rickandmorty
 
 import com.minroud.mortyverse.domain.result.error.DomainError
 import retrofit2.HttpException
