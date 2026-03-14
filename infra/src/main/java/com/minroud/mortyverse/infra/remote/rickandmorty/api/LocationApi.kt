@@ -1,4 +1,4 @@
-package com.minroud.mortyverse.infra.data.sources.remote.retrofit.rickandmorty.api
+package com.minroud.mortyverse.infra.remote.rickandmorty.api
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
