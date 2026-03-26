@@ -20,4 +20,3 @@ sealed interface RickAndMortyEndpoint {
         const val base = "https://rickandmortyapi.com/"
     }
 }
-

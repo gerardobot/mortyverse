@@ -17,13 +17,13 @@ class CoilImageLoader : ImageLoader {
         model: String,
         contentDescription: String?,
         modifier: Modifier,
-        contentScale: ContentScale?
+        contentScale: ContentScale?,
     ) {
         coil.compose.AsyncImage(
             model = model,
             contentDescription = contentDescription,
             modifier = modifier,
-            contentScale = contentScale ?: ContentScale.Fit
+            contentScale = contentScale ?: ContentScale.Fit,
         )
     }
 
@@ -31,7 +31,7 @@ class CoilImageLoader : ImageLoader {
     override fun Gif(
         data: Any,
         contentDescription: String?,
-        modifier: Modifier
+        modifier: Modifier,
     ) {
         val imageLoader = coil.ImageLoader.Builder(LocalContext.current)
             .components { add(ImageDecoderDecoder.Factory()) }
@@ -45,9 +45,9 @@ class CoilImageLoader : ImageLoader {
                     .apply(block = fun ImageRequest.Builder.() {
                         size(Size.ORIGINAL)
                     }).build(),
-                imageLoader = imageLoader
+                imageLoader = imageLoader,
             ),
-            contentDescription = contentDescription
+            contentDescription = contentDescription,
         )
     }
 }

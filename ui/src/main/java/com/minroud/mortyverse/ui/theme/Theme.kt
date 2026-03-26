@@ -15,7 +15,7 @@ private val DarkColorScheme = darkColorScheme(
     secondary = PurpleGrey80,
     tertiary = Pink80,
     onSurface = DimWhite,
-    onSurfaceVariant = RickHair
+    onSurfaceVariant = RickHair,
 )
 
 private val LightColorScheme = lightColorScheme(
@@ -23,13 +23,13 @@ private val LightColorScheme = lightColorScheme(
     secondary = PurpleGrey40,
     tertiary = Pink40,
     onSurface = DarkGrey,
-    onSurfaceVariant = DimWhite
+    onSurfaceVariant = DimWhite,
 )
 
 @Composable
 fun MortyverseTheme(
     darkTheme: Boolean = false,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     val colorScheme = when {
         darkTheme -> DarkColorScheme
@@ -47,6 +47,6 @@ fun MortyverseTheme(
     MaterialTheme(
         colorScheme = colorScheme,
         typography = Typography,
-        content = content
+        content = content,
     )
 }
