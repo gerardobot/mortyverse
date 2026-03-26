@@ -126,16 +126,13 @@ internal fun CharacterList(
 private fun rememberTranslationY(lazyListState: LazyListState) =
     remember {
         derivedStateOf {
-            when {
-                lazyListState.layoutInfo.visibleItemsInfo.isNotEmpty() &&
-                    lazyListState.firstVisibleItemIndex == 0 ||
-                    lazyListState.firstVisibleItemIndex == 1 -> {
-                    lazyListState.firstVisibleItemScrollOffset * .4f
-                }
-
-                else -> {
-                    0f
-                }
+            val visibleItems = lazyListState.layoutInfo.visibleItemsInfo
+            val firstIndex = lazyListState.firstVisibleItemIndex
+            val isBannerVisible = visibleItems.isNotEmpty() && (firstIndex == 0 || firstIndex == 1)
+            if (isBannerVisible) {
+                lazyListState.firstVisibleItemScrollOffset * .4f
+            } else {
+                0f
             }
         }
     }
@@ -144,18 +141,15 @@ private fun rememberTranslationY(lazyListState: LazyListState) =
 private fun rememberVisibility(lazyListState: LazyListState) =
     remember {
         derivedStateOf {
-            when {
-                lazyListState.layoutInfo.visibleItemsInfo.isNotEmpty() &&
-                    lazyListState.firstVisibleItemIndex == 0 ||
-                    lazyListState.firstVisibleItemIndex == 1 -> {
-                    val imageSize = lazyListState.layoutInfo.visibleItemsInfo[1].size
-                    val scrollOffset = lazyListState.firstVisibleItemScrollOffset
-                    scrollOffset / imageSize.toFloat()
-                }
-
-                else -> {
-                    1f
-                }
+            val visibleItems = lazyListState.layoutInfo.visibleItemsInfo
+            val firstIndex = lazyListState.firstVisibleItemIndex
+            val hasBannerItem = visibleItems.size > 1 && (firstIndex == 0 || firstIndex == 1)
+            if (hasBannerItem) {
+                val imageSize = visibleItems[1].size
+                val scrollOffset = lazyListState.firstVisibleItemScrollOffset
+                if (imageSize > 0) scrollOffset / imageSize.toFloat() else 1f
+            } else {
+                1f
             }
         }
     }
