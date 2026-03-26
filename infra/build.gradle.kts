@@ -1,3 +1,5 @@
+import com.minroud.mortyverse.buildlogic.dsl.core
+
 plugins {
     alias(libs.plugins.mortyverse.infra)
     alias(libs.plugins.mortyverse.compose)
@@ -6,8 +8,7 @@ plugins {
 }
 
 dependencies {
-    implementation(projects.data)
-    implementation(projects.domain)
+    core(projects).layers { domain() }
 
     implementation(libs.compose.ui)
 
