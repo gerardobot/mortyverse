@@ -5,14 +5,13 @@ compose-bom = "2026.03.00"
 compose-activity = "1.13.0"
 compose-navigation = "2.9.7"
 chucker = "4.3.1"
-junit = "4.13.2"
 kotlin = "2.3.10"
 kotlinx-coroutines = "1.10.2"
 kotlinx-serialization = "1.10.0"
 koin-bom = "4.1.1"
 ktlint = "14.2.0"
-mockk = "1.14.9"
 retrofit = "3.0.0"
+agp = "9.1.0"
 
 [libraries]
 ## Build Logic ##
@@ -38,7 +37,6 @@ compose-ui = { module = "androidx.compose.ui:ui" }
 koin-bom = { module = "io.insert-koin:koin-bom", version.ref = "koin-bom" }
 koin-core = { module = "io.insert-koin:koin-core" }
 koin-android = { module = "io.insert-koin:koin-android" }
-koin-compose = { module = "io.insert-koin:koin-compose" }
 koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose" }
 
 # Kotlinx
@@ -47,7 +45,7 @@ kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serializa
 
 # Retrofit
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
-retrofit-converter-kotlinx-serialization = { module = "com.squareup.retrofit2:converter-kotlinx-serialization", version.ref = "retrofit" }
+retrofit-converter-serialization = { module = "com.squareup.retrofit2:converter-kotlinx-serialization", version.ref = "retrofit" }
 
 ## Debug ##
 # Chucker
@@ -60,16 +58,23 @@ debug-compose-tooling = { module = "androidx.compose.ui:ui-tooling" }
 #Chucker
 release-chucker = { module = "com.github.chuckerteam.chucker:library-no-op", version.ref = "chucker" }
 
-## Test ##
-test-junit = { module = "junit:junit", version.ref = "junit" }
-test-kotlinx-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
-test-mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
-test-kotlin = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin"}
-
 [plugins]
 mortyverse-android-application = { id = "mortyverse.android.application" }
+mortyverse-app = { id = "mortyverse.app" }
+mortyverse-ui = { id = "mortyverse.ui" }
+mortyverse-domain = { id = "mortyverse.domain" }
+mortyverse-data = { id = "mortyverse.data" }
+mortyverse-infra = { id = "mortyverse.infra" }
+mortyverse-koin = { id = "mortyverse.koin" }
+mortyverse-koin-compose = { id = "mortyverse.koin.compose" }
+mortyverse-compose = { id = "mortyverse.compose" }
+mortyverse-compose-ui = { id = "mortyverse.compose.ui" }
+mortyverse-compose-app = { id = "mortyverse.compose.app" }
+mortyverse-retrofit-serialization = { id = "mortyverse.retrofit.serialization" }
 mortyverse-android-library = { id = "mortyverse.android.library" }
-mortyverse-jvm-library = { id = "mortyverse.jvm.library" }
+mortyverse-android-ui = { id = "mortyverse.android.ui" }
+mortyverse-kotlin-library = { id = "mortyverse.kotlin.library" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
+android-library = { id = "com.android.library", version.ref = "agp" }
 

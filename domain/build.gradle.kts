@@ -1,5 +1,5 @@
 plugins {
-    alias(libs.plugins.mortyverse.jvm.library)
+    alias(libs.plugins.mortyverse.domain)
 }
 
 dependencies {

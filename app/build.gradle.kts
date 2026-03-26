@@ -1,5 +1,7 @@
 plugins {
-    alias(libs.plugins.mortyverse.android.application)
+    alias(libs.plugins.mortyverse.app)
+    alias(libs.plugins.mortyverse.compose.app)
+    alias(libs.plugins.mortyverse.koin.compose)
 }
 
 dependencies {
