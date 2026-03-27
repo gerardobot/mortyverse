@@ -1,4 +1,4 @@
-package com.minroud.mortyverse.infra.ui.loaders
+package com.minroud.mortyverse.ui.adapters.imageloader
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier

@@ -1,4 +1,4 @@
-package com.minroud.mortyverse.infra.ui.loaders.coil
+package com.minroud.mortyverse.infra.ui.imageloader.coil
 
 import androidx.compose.foundation.Image
 import androidx.compose.runtime.Composable
@@ -9,7 +9,7 @@ import coil.compose.rememberAsyncImagePainter
 import coil.decode.ImageDecoderDecoder
 import coil.request.ImageRequest
 import coil.size.Size
-import com.minroud.mortyverse.infra.ui.loaders.ImageLoader
+import com.minroud.mortyverse.ui.adapters.imageloader.ImageLoader
 
 class CoilImageLoader : ImageLoader {
     @Composable

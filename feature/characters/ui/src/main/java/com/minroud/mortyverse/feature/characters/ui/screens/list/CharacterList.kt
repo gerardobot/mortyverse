@@ -27,7 +27,7 @@ import androidx.compose.ui.zIndex
 import com.minroud.mortyverse.feature.characters.domain.model.MortyverseCharacter
 import com.minroud.mortyverse.feature.characters.ui.R
 import com.minroud.mortyverse.feature.characters.ui.screens.list.components.CharacterCard
-import com.minroud.mortyverse.infra.ui.loaders.ImageLoader
+import com.minroud.mortyverse.ui.adapters.imageloader.ImageLoader
 import com.minroud.mortyverse.ui.animations.LoadingAnimation
 import com.minroud.mortyverse.ui.containers.AsyncContent
 import com.minroud.mortyverse.ui.containers.MortyverseScaffold

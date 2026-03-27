@@ -8,7 +8,7 @@ plugins {
 }
 
 dependencies {
-    core(projects).layers { domain(); ui(); infra() }
+    core(projects).layers { domain(); ui() }
     feature(projects.feature.characters).layers { domain() }
 
     implementation(libs.compose.navigation)

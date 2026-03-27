@@ -17,7 +17,7 @@ import com.minroud.mortyverse.feature.characters.domain.model.MortyverseCharacte
 import com.minroud.mortyverse.feature.characters.domain.model.MortyverseCharacterDetail
 import com.minroud.mortyverse.feature.characters.ui.R
 import com.minroud.mortyverse.feature.characters.ui.screens.detail.components.CharacterBio
-import com.minroud.mortyverse.infra.ui.loaders.ImageLoader
+import com.minroud.mortyverse.ui.adapters.imageloader.ImageLoader
 import com.minroud.mortyverse.ui.containers.AsyncContent
 import com.minroud.mortyverse.ui.containers.MortyverseScaffold
 import com.minroud.mortyverse.ui.theme.MortyverseTheme

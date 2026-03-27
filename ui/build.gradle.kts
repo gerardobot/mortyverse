@@ -7,7 +7,7 @@ plugins {
 }
 
 dependencies {
-    core(projects).layers { domain(); infra() }
+    core(projects).layers { domain() }
 
     implementation(libs.compose.navigation)
     implementation(libs.compose.material.icons.extended)

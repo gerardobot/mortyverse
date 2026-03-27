@@ -2,7 +2,7 @@ package com.minroud.mortyverse.ui.animations
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.minroud.mortyverse.infra.ui.loaders.ImageLoader
+import com.minroud.mortyverse.ui.adapters.imageloader.ImageLoader
 import com.minroud.mortyverse.ui.R
 import org.koin.compose.koinInject
 

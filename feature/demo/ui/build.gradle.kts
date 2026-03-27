@@ -6,7 +6,7 @@ plugins {
 }
 
 dependencies {
-    core(projects).layers { domain(); ui(); infra() }
+    core(projects).layers { domain(); ui() }
 
     implementation(libs.compose.navigation)
 }
