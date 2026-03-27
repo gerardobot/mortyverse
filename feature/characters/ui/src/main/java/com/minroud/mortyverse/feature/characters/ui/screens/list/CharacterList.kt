@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -25,9 +24,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import androidx.paging.LoadState
+import androidx.paging.PagingData
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.minroud.mortyverse.feature.characters.domain.model.MortyverseCharacter
 import com.minroud.mortyverse.feature.characters.ui.R
 import com.minroud.mortyverse.feature.characters.ui.screens.list.components.CharacterCard
+import com.minroud.mortyverse.feature.characters.ui.screens.list.paging.CharactersPagingException
 import com.minroud.mortyverse.ui.adapters.imageloader.ImageLoader
 import com.minroud.mortyverse.ui.animations.LoadingAnimation
 import com.minroud.mortyverse.ui.containers.AsyncContent
@@ -39,13 +43,13 @@ import com.minroud.mortyverse.ui.topbar.TopBarButton
 import com.minroud.mortyverse.ui.topbar.UpdateTopBarTitle
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.flowOf
 
 @Composable
 internal fun CharacterList(
-    state: CharacterListViewModel.State,
+    characters: LazyPagingItems<MortyverseCharacter>,
     topBarButton: TopBarButton,
     onCharacterSelected: (String) -> Unit,
-    onScrollEnd: () -> Unit,
     imageLoader: ImageLoader,
     modifier: Modifier = Modifier,
 ) {
@@ -53,25 +57,38 @@ internal fun CharacterList(
     val bannerTranslationY by rememberTranslationY(lazyListState = lazyListState)
     val topBarVisibility by rememberVisibility(lazyListState = lazyListState)
     val homeTitle = stringResource(id = R.string.character_list_title)
+    val refreshState = characters.loadState.refresh
+    val refreshError = when (refreshState) {
+        is LoadState.Error -> {
+            val cause = refreshState.error
+            (cause as? CharactersPagingException)?.domainError
+                ?: com.minroud.mortyverse.domain.error.DomainError.Unknown(cause)
+        }
+        else -> null
+    }
 
-    UpdateTopBarTitle(title = homeTitle, enabled = state.error == null)
+    UpdateTopBarTitle(title = homeTitle, enabled = refreshError == null)
     val currentTitle = LocalTopBarTitleState.current?.title ?: homeTitle
 
     LaunchedEffect(lazyListState) {
         snapshotFlow { lazyListState.isNearEnd(3) }
             .distinctUntilChanged()
             .filter { it }
-            .collect { onScrollEnd() }
+            .collect {
+                if (characters.loadState.append is LoadState.Error) {
+                    characters.retry()
+                }
+            }
     }
 
     MortyverseScaffold(
         modifier = modifier,
         button = topBarButton,
-        showTopBar = state.error != null,
+        showTopBar = refreshError != null,
     ) { padding ->
         AsyncContent(
-            isLoading = state.isInitialLoading,
-            error = state.error,
+            isLoading = refreshState is LoadState.Loading,
+            error = refreshError,
             modifier = Modifier.padding(padding),
         ) {
             LazyColumn(state = lazyListState) {
@@ -104,7 +121,8 @@ internal fun CharacterList(
                 item {
                     Spacer(modifier = Modifier.padding(4.dp))
                 }
-                items(state.characterItems) { item ->
+                items(count = characters.itemCount) { index ->
+                    val item = characters[index] ?: return@items
                     CharacterCard(
                         character = item,
                         imageLoader = imageLoader,
@@ -112,7 +130,7 @@ internal fun CharacterList(
                         onCharacterSelected(it)
                     }
                 }
-                if (state.isAppending) {
+                if (characters.loadState.append is LoadState.Loading) {
                     item {
                         LoadingAnimation(
                             modifier = Modifier
@@ -186,9 +204,9 @@ private fun CharacterListPreview() {
     }
 
     MortyverseTheme {
-        CharacterList(
-            state = CharacterListViewModel.State(
-                characterItems = listOf(
+        val pagingItems = flowOf(
+            PagingData.from(
+                listOf(
                     MortyverseCharacter(
                         id = "1",
                         name = "Rick Sanchez",
@@ -206,12 +224,12 @@ private fun CharacterListPreview() {
                         image = "",
                     ),
                 ),
-                nextPage = 2,
-                isInitialLoading = false,
             ),
+        ).collectAsLazyPagingItems()
+        CharacterList(
+            characters = pagingItems,
             topBarButton = TopBarButton.Menu {},
             onCharacterSelected = {},
-            onScrollEnd = {},
             imageLoader = previewImageLoader,
         )
     }
