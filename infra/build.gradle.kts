@@ -8,7 +8,7 @@ plugins {
 }
 
 dependencies {
-    core(projects).layers { domain() }
+    core(projects).layers { domain(); ui() }
 
     implementation(libs.compose.ui)
 

@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.minroud.mortyverse.feature.characters.domain.model.MortyverseCharacter
 import com.minroud.mortyverse.feature.characters.ui.R
-import com.minroud.mortyverse.infra.ui.loaders.ImageLoader
+import com.minroud.mortyverse.ui.adapters.imageloader.ImageLoader
 import com.minroud.mortyverse.ui.theme.MortyverseTheme
 
 @Composable
