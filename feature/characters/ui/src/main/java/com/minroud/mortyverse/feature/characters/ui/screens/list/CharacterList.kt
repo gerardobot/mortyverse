@@ -11,11 +11,9 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
@@ -28,10 +26,10 @@ import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.minroud.mortyverse.domain.error.DomainError
 import com.minroud.mortyverse.feature.characters.domain.model.MortyverseCharacter
 import com.minroud.mortyverse.feature.characters.ui.R
 import com.minroud.mortyverse.feature.characters.ui.screens.list.components.CharacterCard
-import com.minroud.mortyverse.feature.characters.ui.screens.list.paging.CharactersPagingException
 import com.minroud.mortyverse.ui.adapters.imageloader.ImageLoader
 import com.minroud.mortyverse.ui.animations.LoadingAnimation
 import com.minroud.mortyverse.ui.containers.AsyncContent
@@ -41,8 +39,6 @@ import com.minroud.mortyverse.ui.topbar.LocalTopBarTitleState
 import com.minroud.mortyverse.ui.topbar.TopBar
 import com.minroud.mortyverse.ui.topbar.TopBarButton
 import com.minroud.mortyverse.ui.topbar.UpdateTopBarTitle
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flowOf
 
 @Composable
@@ -51,35 +47,17 @@ internal fun CharacterList(
     topBarButton: TopBarButton,
     onCharacterSelected: (String) -> Unit,
     imageLoader: ImageLoader,
+    lazyListState: LazyListState,
+    isRefreshing: Boolean,
+    refreshError: DomainError?,
     modifier: Modifier = Modifier,
 ) {
-    val lazyListState: LazyListState = rememberLazyListState()
-    val bannerTranslationY by rememberTranslationY(lazyListState = lazyListState)
-    val topBarVisibility by rememberVisibility(lazyListState = lazyListState)
+    val bannerTranslationY by rememberTranslationY(lazyListState)
+    val topBarVisibility by rememberVisibility(lazyListState)
     val homeTitle = stringResource(id = R.string.character_list_title)
-    val refreshState = characters.loadState.refresh
-    val refreshError = when (refreshState) {
-        is LoadState.Error -> {
-            val cause = refreshState.error
-            (cause as? CharactersPagingException)?.domainError
-                ?: com.minroud.mortyverse.domain.error.DomainError.Unknown(cause)
-        }
-        else -> null
-    }
 
     UpdateTopBarTitle(title = homeTitle, enabled = refreshError == null)
     val currentTitle = LocalTopBarTitleState.current?.title ?: homeTitle
-
-    LaunchedEffect(lazyListState) {
-        snapshotFlow { lazyListState.isNearEnd(3) }
-            .distinctUntilChanged()
-            .filter { it }
-            .collect {
-                if (characters.loadState.append is LoadState.Error) {
-                    characters.retry()
-                }
-            }
-    }
 
     MortyverseScaffold(
         modifier = modifier,
@@ -87,7 +65,7 @@ internal fun CharacterList(
         showTopBar = refreshError != null,
     ) { padding ->
         AsyncContent(
-            isLoading = refreshState is LoadState.Loading,
+            isLoading = isRefreshing,
             error = refreshError,
             modifier = Modifier.padding(padding),
         ) {
@@ -231,6 +209,9 @@ private fun CharacterListPreview() {
             topBarButton = TopBarButton.Menu {},
             onCharacterSelected = {},
             imageLoader = previewImageLoader,
+            lazyListState = rememberLazyListState(),
+            isRefreshing = false,
+            refreshError = null,
         )
     }
 }
