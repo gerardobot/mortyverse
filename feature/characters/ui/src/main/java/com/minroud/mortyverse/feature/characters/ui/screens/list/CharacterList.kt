@@ -16,6 +16,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
@@ -36,6 +37,8 @@ import com.minroud.mortyverse.ui.topbar.LocalTopBarTitleState
 import com.minroud.mortyverse.ui.topbar.TopBar
 import com.minroud.mortyverse.ui.topbar.TopBarButton
 import com.minroud.mortyverse.ui.topbar.UpdateTopBarTitle
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
 
 @Composable
 internal fun CharacterList(
@@ -53,6 +56,13 @@ internal fun CharacterList(
 
     UpdateTopBarTitle(title = homeTitle, enabled = state.error == null)
     val currentTitle = LocalTopBarTitleState.current?.title ?: homeTitle
+
+    LaunchedEffect(lazyListState) {
+        snapshotFlow { lazyListState.isNearEnd(3) }
+            .distinctUntilChanged()
+            .filter { it }
+            .collect { onScrollEnd() }
+    }
 
     MortyverseScaffold(
         modifier = modifier,
@@ -94,27 +104,21 @@ internal fun CharacterList(
                 item {
                     Spacer(modifier = Modifier.padding(4.dp))
                 }
-                items(state.characterItems + null) { item ->
-                    if (item == null && !state.isLastPage) {
+                items(state.characterItems) { item ->
+                    CharacterCard(
+                        character = item,
+                        imageLoader = imageLoader,
+                    ) {
+                        onCharacterSelected(it)
+                    }
+                }
+                item {
+                    if (!state.isLastPage) {
                         LoadingAnimation(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(bottom = 8.dp),
                         )
-                    } else if (item != null) {
-                        CharacterCard(
-                            character = item,
-                            imageLoader = imageLoader,
-                        ) {
-                            onCharacterSelected(it)
-                        }
-                    }
-                }
-                item {
-                    if (!state.isGettingNextCharacterPage && !state.isLastPage) {
-                        LaunchedEffect(true) {
-                            onScrollEnd()
-                        }
                     }
                 }
             }
@@ -153,6 +157,13 @@ private fun rememberVisibility(lazyListState: LazyListState) =
             }
         }
     }
+
+fun LazyListState.isNearEnd(threshold: Int): Boolean {
+    val layoutInfo = layoutInfo
+    val lastVisible = layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: return false
+    val total = layoutInfo.totalItemsCount
+    return lastVisible >= (total - threshold)
+}
 
 @Preview(showBackground = true)
 @Composable

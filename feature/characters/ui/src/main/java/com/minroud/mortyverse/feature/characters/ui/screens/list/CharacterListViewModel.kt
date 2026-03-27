@@ -24,7 +24,8 @@ internal class CharacterListViewModel(
         if (state.value.canGetNextPage) getNextCharacterPage()
     }
 
-    private fun getNextCharacterPage() =
+    private fun getNextCharacterPage() {
+        if (state.value.isGettingNextCharacterPage || state.value.isLastPage) return
         state.value.nextPage?.let {
             viewModelScope.launch {
                 _state.update { it.copy(isGettingNextCharacterPage = true) }
@@ -45,6 +46,7 @@ internal class CharacterListViewModel(
                 _state.update { it.copy(isGettingNextCharacterPage = false) }
             }
         }
+    }
 
     data class State(
         val characterItems: List<MortyverseCharacter> = listOf(),
