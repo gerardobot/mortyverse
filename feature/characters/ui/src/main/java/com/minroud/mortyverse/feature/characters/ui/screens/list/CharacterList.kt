@@ -70,7 +70,7 @@ internal fun CharacterList(
         showTopBar = state.error != null,
     ) { padding ->
         AsyncContent(
-            isLoading = state.isLoading,
+            isLoading = state.isInitialLoading,
             error = state.error,
             modifier = Modifier.padding(padding),
         ) {
@@ -112,8 +112,8 @@ internal fun CharacterList(
                         onCharacterSelected(it)
                     }
                 }
-                item {
-                    if (!state.isLastPage) {
+                if (state.isAppending) {
+                    item {
                         LoadingAnimation(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -207,6 +207,7 @@ private fun CharacterListPreview() {
                     ),
                 ),
                 nextPage = 2,
+                isInitialLoading = false,
             ),
             topBarButton = TopBarButton.Menu {},
             onCharacterSelected = {},
