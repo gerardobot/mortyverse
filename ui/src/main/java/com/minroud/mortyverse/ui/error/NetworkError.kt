@@ -18,28 +18,29 @@ import com.minroud.mortyverse.ui.R
 import com.minroud.mortyverse.ui.theme.MortyShirt
 
 @Composable
-fun NetworkError() = Column(
-    Modifier
-        .fillMaxSize()
-        .background(MaterialTheme.colorScheme.primary),
-    verticalArrangement = Arrangement.Center,
-    horizontalAlignment = Alignment.CenterHorizontally
-) {
-    Image(
-        modifier = Modifier.size(320.dp),
-        painter = painterResource(id = R.drawable.img_rick_morty_portal),
-        contentDescription = stringResource(id = R.string.error_network_image_description)
-    )
+fun NetworkError() =
+    Column(
+        Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.primary),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Image(
+            modifier = Modifier.size(320.dp),
+            painter = painterResource(id = R.drawable.img_rick_morty_portal),
+            contentDescription = stringResource(id = R.string.error_network_image_description),
+        )
 
-    Spacer(modifier = Modifier.size(16.dp))
+        Spacer(modifier = Modifier.size(16.dp))
 
-    Text(
-        modifier = Modifier.padding(horizontal = 24.dp),
-        text = stringResource(id = R.string.error_network_dialog),
-        color = MortyShirt,
-        fontSize = 30.sp,
-        fontWeight = FontWeight.Bold,
-        lineHeight = 40.sp,
-        textAlign = TextAlign.Start
-    )
-}
+        Text(
+            modifier = Modifier.padding(horizontal = 24.dp),
+            text = stringResource(id = R.string.error_network_dialog),
+            color = MortyShirt,
+            fontSize = 30.sp,
+            fontWeight = FontWeight.Bold,
+            lineHeight = 40.sp,
+            textAlign = TextAlign.Start,
+        )
+    }

@@ -1,22 +1,40 @@
 package com.minroud.mortyverse.domain.result
 
-import com.minroud.mortyverse.domain.result.error.DomainError
+import com.minroud.mortyverse.domain.error.DomainError
+import com.minroud.mortyverse.domain.error.FeatureError
 import kotlinx.coroutines.CancellationException
 
-sealed class DomainResult<T> {
-    data class Success<T>(val data: T) : DomainResult<T>()
-    data class Error<T>(val error: DomainError) : DomainResult<T>()
+sealed class DomainResult<out T> {
+    data class Success<out T>(
+        val data: T,
+    ) : DomainResult<T>()
+
+    data class Error(
+        val error: DomainError,
+    ) : DomainResult<Nothing>() {
+        constructor(featureError: FeatureError) : this(DomainError.Feature(featureError))
+    }
+
+    fun <T> success(data: T) = Success(data)
+
+    fun error(error: DomainError) = Error(error)
+
+    fun error(featureError: FeatureError) = Error(featureError)
 
     val isSuccess: Boolean get() = this is Success
+
     val isError: Boolean get() = this is Error
 
     fun getOrNull(): T? = if (this is Success) data else null
 
-    fun getOrDefault(default: T): T = if (this is Success) data else default
+    fun getOrElse(default: () -> @UnsafeVariance T): T = if (this is Success) data else default()
 
     fun errorOrNull(): DomainError? = if (this is Error) error else null
 
-    inline fun <R> fold(onSuccess: (value: T) -> R, onError: (error: DomainError) -> R): R =
+    inline fun <R> fold(
+        onSuccess: (value: T) -> R,
+        onError: (error: DomainError) -> R,
+    ): R =
         when (this) {
             is Success -> onSuccess(data)
             is Error -> onError(error)
@@ -32,32 +50,39 @@ sealed class DomainResult<T> {
         return this
     }
 
-    inline fun <R> map(transform: (data: T) -> R): DomainResult<R> = when (this) {
-        is Success -> { Success(transform(data)) }
-        is Error -> Error(error)
-    }
+    inline fun <R> map(transform: (data: T) -> R): DomainResult<R> =
+        when (this) {
+            is Success -> { Success(transform(data)) }
+
+            is Error -> {
+                Error(error)
+            }
+        }
 
     inline fun <R> mapCatching(
         transform: (data: T) -> R,
-        catching: (Exception) -> DomainError
-    ): DomainResult<R> = when (this) {
-        is Success -> resultCatching({ transform(data) }) { catching(it) }
-        is Error -> Error(error)
-    }
+        catching: (Exception) -> DomainError,
+    ): DomainResult<R> =
+        when (this) {
+            is Success -> resultCatching({ transform(data) }) { catching(it) }
+            is Error -> Error(error)
+        }
 
-    override fun toString(): String = when (this) {
-        is Success -> "Success: $data"
-        is Error -> "Error: $error"
-    }
+    override fun toString(): String =
+        when (this) {
+            is Success -> "Success: $data"
+            is Error -> "Error: $error"
+        }
 }
 
 inline fun <T, R> T.resultCatching(
     block: T.() -> R,
-    catching: (Exception) -> DomainError
-): DomainResult<R> = try {
-    DomainResult.Success(block())
-} catch (cancellationException: CancellationException) {
-    throw cancellationException
-} catch (e: Exception) {
-    DomainResult.Error(catching(e))
-}
+    catching: (Exception) -> DomainError,
+): DomainResult<R> =
+    try {
+        DomainResult.Success(block())
+    } catch (cancellationException: CancellationException) {
+        throw cancellationException
+    } catch (e: Exception) {
+        DomainResult.Error(catching(e))
+    }

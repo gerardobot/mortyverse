@@ -1,17 +1,14 @@
+import com.minroud.mortyverse.buildlogic.dsl.core
+import com.minroud.mortyverse.buildlogic.dsl.feature
+
 plugins {
-    alias(libs.plugins.mortyverse.android.application)
+    alias(libs.plugins.mortyverse.app)
+    alias(libs.plugins.mortyverse.compose.app)
+    alias(libs.plugins.mortyverse.koin.compose)
 }
 
 dependencies {
-    implementation(projects.ui)
-    implementation(projects.domain)
-    implementation(projects.data)
-    implementation(projects.infra)
-
-    implementation(platform(libs.koin.bom))
-    implementation(libs.compose.activity)
-
-    implementation(libs.koin.android)
-
-    testImplementation(libs.test.junit)
+    core(projects).layers { domain(); ui(); infra() }
+    feature(projects.feature.characters).layers { domain(); data(); ui(); infra() }
+    feature(projects.feature.demo).layers { ui() }
 }

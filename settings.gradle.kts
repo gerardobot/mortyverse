@@ -23,9 +23,13 @@ rootProject.name = "Mortyverse"
 include(
     ":app",
     ":domain",
-    ":data",
     ":infra",
     ":ui",
+    ":feature:characters:ui",
+    ":feature:characters:domain",
+    ":feature:characters:data",
+    ":feature:characters:infra",
+    ":feature:demo:ui",
 )
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")

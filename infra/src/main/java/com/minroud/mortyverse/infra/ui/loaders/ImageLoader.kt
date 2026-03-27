@@ -10,9 +10,13 @@ interface ImageLoader {
         model: String,
         contentDescription: String?,
         modifier: Modifier,
-        contentScale: ContentScale?
+        contentScale: ContentScale?,
     )
 
     @Composable
-    fun Gif(data: Any, contentDescription: String?, modifier: Modifier)
+    fun Gif(
+        data: Any,
+        contentDescription: String?,
+        modifier: Modifier,
+    )
 }

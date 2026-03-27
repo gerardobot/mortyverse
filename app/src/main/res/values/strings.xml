@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Mortyverse</string>
+
+    <string name="drawer_option_home">Home</string>
+    <string name="drawer_option_invalid_character_id">Use a wrong character ID</string>
+    <string name="drawer_option_network_error">Break the Internet</string>
+    <string name="drawer_option_unknown_error">Do something weird</string>
+</resources>

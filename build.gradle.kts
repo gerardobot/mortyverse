@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.kotlin.serialization) apply false
     alias(libs.plugins.ktlint)
+    alias(libs.plugins.android.library) apply false
 }
 
 ktlint {
@@ -10,6 +11,5 @@ ktlint {
     filter {
         exclude("**/build/**")
         exclude("**/generated/**")
-        include("**/*.kt")
     }
 }

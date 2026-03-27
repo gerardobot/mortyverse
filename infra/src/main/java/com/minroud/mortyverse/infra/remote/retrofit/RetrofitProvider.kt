@@ -9,15 +9,14 @@ import retrofit2.converter.kotlinx.serialization.asConverterFactory
 fun createRetrofit(
     baseUrl: String,
     client: OkHttpClient,
-    json: Json
+    json: Json,
 ): Retrofit =
     Retrofit.Builder()
         .baseUrl(baseUrl)
         .client(client)
         .addConverterFactory(
-            json.asConverterFactory("application/json".toMediaType())
+            json.asConverterFactory("application/json".toMediaType()),
         )
         .build()
 
-inline fun <reified T> Retrofit.createService(): T =
-    create(T::class.java)
+inline fun <reified T> Retrofit.createService(): T = create(T::class.java)

@@ -12,7 +12,7 @@ fun createOkHttpClient(context: Context): OkHttpClient =
         .addInterceptor(
             ChuckerInterceptor.Builder(context)
                 .alwaysReadResponseBody(true)
-                .build()
+                .build(),
         )
         .readTimeout(DEFAULT_TIMEOUT_SECONDS, TimeUnit.SECONDS)
         .writeTimeout(DEFAULT_TIMEOUT_SECONDS, TimeUnit.SECONDS)
