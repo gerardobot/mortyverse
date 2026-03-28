@@ -4,16 +4,20 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
@@ -50,6 +54,7 @@ internal fun CharacterList(
     lazyListState: LazyListState,
     isRefreshing: Boolean,
     refreshError: DomainError?,
+    snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
 ) {
     val bannerTranslationY by rememberTranslationY(lazyListState)
@@ -69,55 +74,65 @@ internal fun CharacterList(
             error = refreshError,
             modifier = Modifier.padding(padding),
         ) {
-            LazyColumn(state = lazyListState) {
-                stickyHeader {
-                    TopBar(
-                        button = topBarButton,
-                        modifier = Modifier
-                            .background(MaterialTheme.colorScheme.primary)
-                            .graphicsLayer {
-                                alpha = topBarVisibility
-                            },
-                        title = currentTitle,
-                    )
-                }
-                item {
-                    Image(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .zIndex(2f)
-                            .graphicsLayer {
-                                translationY = bannerTranslationY
-                            },
-                        painter = painterResource(id = R.drawable.characters_banner_heads_light),
-                        contentDescription = stringResource(
-                            id = R.string.characters_banner_heads_description,
-                        ),
-                        contentScale = ContentScale.FillWidth,
-                    )
-                }
-                item {
-                    Spacer(modifier = Modifier.padding(4.dp))
-                }
-                items(count = characters.itemCount) { index ->
-                    val item = characters[index] ?: return@items
-                    CharacterCard(
-                        character = item,
-                        imageLoader = imageLoader,
-                    ) {
-                        onCharacterSelected(it)
-                    }
-                }
-                if (characters.loadState.append is LoadState.Loading) {
-                    item {
-                        LoadingAnimation(
+            Box(modifier = Modifier.fillMaxSize()) {
+                LazyColumn(state = lazyListState) {
+                    stickyHeader {
+                        TopBar(
+                            button = topBarButton,
                             modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(bottom = 8.dp),
+                                .background(MaterialTheme.colorScheme.primary)
+                                .graphicsLayer {
+                                    alpha = topBarVisibility
+                                },
+                            title = currentTitle,
                         )
                     }
+                    item {
+                        Image(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .zIndex(2f)
+                                .graphicsLayer {
+                                    translationY = bannerTranslationY
+                                },
+                            painter = painterResource(id = R.drawable.characters_banner_heads_light),
+                            contentDescription = stringResource(
+                                id = R.string.characters_banner_heads_description,
+                            ),
+                            contentScale = ContentScale.FillWidth,
+                        )
+                    }
+                    item {
+                        Spacer(modifier = Modifier.padding(4.dp))
+                    }
+                    items(count = characters.itemCount) { index ->
+                        val item = characters[index] ?: return@items
+                        CharacterCard(
+                            character = item,
+                            imageLoader = imageLoader,
+                        ) {
+                            onCharacterSelected(it)
+                        }
+                    }
+                    if (characters.loadState.append is LoadState.Loading) {
+                        item {
+                            LoadingAnimation(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(bottom = 8.dp),
+                            )
+                        }
+                    }
                 }
+
+                SnackbarHost(
+                    hostState = snackbarHostState,
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .padding(16.dp),
+                )
             }
+
         }
     }
 }
@@ -212,6 +227,7 @@ private fun CharacterListPreview() {
             lazyListState = rememberLazyListState(),
             isRefreshing = false,
             refreshError = null,
+            snackbarHostState = remember { SnackbarHostState() }
         )
     }
 }

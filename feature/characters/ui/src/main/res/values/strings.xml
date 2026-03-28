@@ -21,4 +21,6 @@
     <string name="character_detail_bio_episodes_one">leaving the show after a gruesome experience involving several plumbuses</string>
     <string name="character_detail_bio_episodes_several">and later came back for more</string>
     <string name="character_detail_bio_episodes_many">and soon became a recurring character</string>
+    <string name="append_retry_error">Couldn\'t get more characters. Let me retry…</string>
+    <string name="append_retry_recovered">Done! Look at all these new characters!</string>
 </resources>

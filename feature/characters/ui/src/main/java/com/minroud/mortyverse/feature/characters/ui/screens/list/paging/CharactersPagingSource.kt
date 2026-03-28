@@ -15,7 +15,7 @@ class CharactersPagingSource(
     }
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, MortyverseCharacter> {
-        val pageNumber = params.key ?: DEFAULT_PAGE
+        val pageNumber = params.key ?: defaultPage
         return getCharacterPage(GetCharacterPageUseCase.Params(pageNumber))
             .fold(
                 onSuccess = { page ->
@@ -27,9 +27,5 @@ class CharactersPagingSource(
                 },
                 onError = { LoadResult.Error(CharactersPagingException(it)) },
             )
-    }
-
-    private companion object {
-        const val DEFAULT_PAGE = 1
     }
 }

@@ -1,17 +1,19 @@
 package com.minroud.mortyverse.feature.characters.ui.screens.list
 
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.snapshotFlow
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.minroud.mortyverse.domain.error.DomainError
 import com.minroud.mortyverse.feature.characters.ui.screens.list.paging.CharactersPagingException
+import com.minroud.mortyverse.feature.characters.ui.screens.list.paging.HandleAppendRetry
+import com.minroud.mortyverse.feature.characters.ui.screens.list.paging.prefetchDistance
 import com.minroud.mortyverse.ui.adapters.imageloader.ImageLoader
 import com.minroud.mortyverse.ui.topbar.TopBarButton
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.filter
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 
@@ -30,15 +32,17 @@ internal fun CharacterListScreen(
         .toDomainErrorOrUnknown()
 
     val lazyListState = rememberLazyListState()
-
-    LaunchedEffect(lazyListState, characters) {
-        snapshotFlow { lazyListState.isNearEnd(3) }
-            .distinctUntilChanged()
-            .filter { it }
-            .collect {
-                if (characters.loadState.append is LoadState.Error) characters.retry()
-            }
+    val snackbarHostState = remember { SnackbarHostState() }
+    val isNearEnd by remember(lazyListState) {
+        derivedStateOf { lazyListState.isNearEnd(prefetchDistance) }
     }
+
+    HandleAppendRetry(
+        isNearEnd = isNearEnd,
+        appendState = characters.loadState.append,
+        snackbarHostState = snackbarHostState,
+        onRetry = { characters.retry() },
+    )
 
     CharacterList(
         characters = characters,
@@ -48,6 +52,7 @@ internal fun CharacterListScreen(
         lazyListState = lazyListState,
         isRefreshing = refreshState is LoadState.Loading,
         refreshError = refreshError,
+        snackbarHostState = snackbarHostState,
     )
 }
 
