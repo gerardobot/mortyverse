@@ -6,5 +6,4 @@ data class Page<T>(
     val items: List<T>,
 ) {
     val size = items.size
-    val isLastPage = nextPage == null
 }

@@ -4,18 +4,20 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
@@ -24,6 +26,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import androidx.paging.LoadState
+import androidx.paging.PagingData
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
+import com.minroud.mortyverse.domain.error.DomainError
 import com.minroud.mortyverse.feature.characters.domain.model.MortyverseCharacter
 import com.minroud.mortyverse.feature.characters.ui.R
 import com.minroud.mortyverse.feature.characters.ui.screens.list.components.CharacterCard
@@ -36,72 +43,70 @@ import com.minroud.mortyverse.ui.topbar.LocalTopBarTitleState
 import com.minroud.mortyverse.ui.topbar.TopBar
 import com.minroud.mortyverse.ui.topbar.TopBarButton
 import com.minroud.mortyverse.ui.topbar.UpdateTopBarTitle
+import kotlinx.coroutines.flow.flowOf
 
 @Composable
 internal fun CharacterList(
-    state: CharacterListViewModel.State,
+    characters: LazyPagingItems<MortyverseCharacter>,
     topBarButton: TopBarButton,
     onCharacterSelected: (String) -> Unit,
-    onScrollEnd: () -> Unit,
     imageLoader: ImageLoader,
+    lazyListState: LazyListState,
+    isRefreshing: Boolean,
+    refreshError: DomainError?,
+    snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
 ) {
-    val lazyListState: LazyListState = rememberLazyListState()
-    val bannerTranslationY by rememberTranslationY(lazyListState = lazyListState)
-    val topBarVisibility by rememberVisibility(lazyListState = lazyListState)
+    val bannerTranslationY by rememberTranslationY(lazyListState)
+    val topBarVisibility by rememberVisibility(lazyListState)
     val homeTitle = stringResource(id = R.string.character_list_title)
 
-    UpdateTopBarTitle(title = homeTitle, enabled = state.error == null)
+    UpdateTopBarTitle(title = homeTitle, enabled = refreshError == null)
     val currentTitle = LocalTopBarTitleState.current?.title ?: homeTitle
 
     MortyverseScaffold(
         modifier = modifier,
         button = topBarButton,
-        showTopBar = state.error != null,
+        showTopBar = refreshError != null,
     ) { padding ->
         AsyncContent(
-            isLoading = state.isLoading,
-            error = state.error,
+            isLoading = isRefreshing,
+            error = refreshError,
             modifier = Modifier.padding(padding),
         ) {
-            LazyColumn(state = lazyListState) {
-                stickyHeader {
-                    TopBar(
-                        button = topBarButton,
-                        modifier = Modifier
-                            .background(MaterialTheme.colorScheme.primary)
-                            .graphicsLayer {
-                                alpha = topBarVisibility
-                            },
-                        title = currentTitle,
-                    )
-                }
-                item {
-                    Image(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .zIndex(2f)
-                            .graphicsLayer {
-                                translationY = bannerTranslationY
-                            },
-                        painter = painterResource(id = R.drawable.characters_banner_heads_light),
-                        contentDescription = stringResource(
-                            id = R.string.characters_banner_heads_description,
-                        ),
-                        contentScale = ContentScale.FillWidth,
-                    )
-                }
-                item {
-                    Spacer(modifier = Modifier.padding(4.dp))
-                }
-                items(state.characterItems + null) { item ->
-                    if (item == null && !state.isLastPage) {
-                        LoadingAnimation(
+            Box(modifier = Modifier.fillMaxSize()) {
+                LazyColumn(state = lazyListState) {
+                    stickyHeader {
+                        TopBar(
+                            button = topBarButton,
+                            modifier = Modifier
+                                .background(MaterialTheme.colorScheme.primary)
+                                .graphicsLayer {
+                                    alpha = topBarVisibility
+                                },
+                            title = currentTitle,
+                        )
+                    }
+                    item {
+                        Image(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(bottom = 8.dp),
+                                .zIndex(2f)
+                                .graphicsLayer {
+                                    translationY = bannerTranslationY
+                                },
+                            painter = painterResource(id = R.drawable.characters_banner_heads_light),
+                            contentDescription = stringResource(
+                                id = R.string.characters_banner_heads_description,
+                            ),
+                            contentScale = ContentScale.FillWidth,
                         )
-                    } else if (item != null) {
+                    }
+                    item {
+                        Spacer(modifier = Modifier.padding(4.dp))
+                    }
+                    items(count = characters.itemCount) { index ->
+                        val item = characters[index] ?: return@items
                         CharacterCard(
                             character = item,
                             imageLoader = imageLoader,
@@ -109,15 +114,25 @@ internal fun CharacterList(
                             onCharacterSelected(it)
                         }
                     }
-                }
-                item {
-                    if (!state.isGettingNextCharacterPage && !state.isLastPage) {
-                        LaunchedEffect(true) {
-                            onScrollEnd()
+                    if (characters.loadState.append is LoadState.Loading) {
+                        item {
+                            LoadingAnimation(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(bottom = 8.dp),
+                            )
                         }
                     }
                 }
+
+                SnackbarHost(
+                    hostState = snackbarHostState,
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .padding(16.dp),
+                )
             }
+
         }
     }
 }
@@ -154,6 +169,13 @@ private fun rememberVisibility(lazyListState: LazyListState) =
         }
     }
 
+fun LazyListState.isNearEnd(threshold: Int): Boolean {
+    val layoutInfo = layoutInfo
+    val lastVisible = layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: return false
+    val total = layoutInfo.totalItemsCount
+    return lastVisible >= (total - threshold)
+}
+
 @Preview(showBackground = true)
 @Composable
 private fun CharacterListPreview() {
@@ -175,9 +197,9 @@ private fun CharacterListPreview() {
     }
 
     MortyverseTheme {
-        CharacterList(
-            state = CharacterListViewModel.State(
-                characterItems = listOf(
+        val pagingItems = flowOf(
+            PagingData.from(
+                listOf(
                     MortyverseCharacter(
                         id = "1",
                         name = "Rick Sanchez",
@@ -195,12 +217,17 @@ private fun CharacterListPreview() {
                         image = "",
                     ),
                 ),
-                nextPage = 2,
             ),
+        ).collectAsLazyPagingItems()
+        CharacterList(
+            characters = pagingItems,
             topBarButton = TopBarButton.Menu {},
             onCharacterSelected = {},
-            onScrollEnd = {},
             imageLoader = previewImageLoader,
+            lazyListState = rememberLazyListState(),
+            isRefreshing = false,
+            refreshError = null,
+            snackbarHostState = remember { SnackbarHostState() }
         )
     }
 }

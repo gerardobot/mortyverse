@@ -12,4 +12,5 @@ dependencies {
     feature(projects.feature.characters).layers { domain() }
 
     implementation(libs.compose.navigation)
+    implementation(libs.paging.compose)
 }
